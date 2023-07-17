@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <style>
+        @font-face {
+            font-family: "Custom Font";
+            src: url("{{font_path}}");
+        }
+
+        html {
+            font-family: "Custom Font";
+            background-color: {{ colors["html"] }};
+        }
+
+        body {
+            font-family: "Custom Font";
+            border: 2px solid{{ colors["body_border"] }};
+            border-radius: 8px;
+            margin: 2px;
+        }
+
+        .card {
+            font-family: "Custom Font";
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: {{ colors["card_body"] }};
+            margin: 10px 4px 10px 4px;
+        }
+
+        h1 {
+            font-family: "Custom Font";
+            margin: 0;
+        }
+
+        h3 {
+            font-family: "Custom Font";
+            margin: 0;
+        }
+
+        .index {
+            font-family: "Custom Font";
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            background: {{ colors["index_bg"] }};
+            color: {{ colors["index_text"] }};
+            text-align: center;
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .card-header {
+            font-family: "Custom Font";
+            background-color: {{ colors["card_header"] }};
+            padding: 5px 0 5px 3px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .card-header .name {
+            font-family: "Custom Font";
+            font-weight: bold;
+            font-size: 30px;
+        }
+
+        .card-header .tags {
+            font-family: "Custom Font";
+            display: flex;
+            margin-left: auto;
+            border-radius: 6px;
+            padding: 2px;
+            margin-right: 2px;
+            flex-wrap: wrap
+        }
+
+        .tag {
+            font-family: "Custom Font";
+            display: flex;
+            align-items: center;
+            border: 2px solid;
+            border-radius: 6px;
+            margin: 3px;
+            max-width: 150px;
+            flex-wrap: wrap;
+        }
+
+        .tag-text {
+            font-family: "Custom Font";
+            font-weight: bold;
+            font-size: 15px;
+            margin: 3px;
+        }
+
+        .horizontal-line {
+            font-family: "Custom Font";
+            border-top: 1px solid #ddd;
+        }
+
+        .card-body {
+            font-family: "Custom Font";
+            font-size: 15px;
+            margin: 4px 4px 4px 4px;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+        }
+
+        .card-body .title {
+            font-family: "Custom Font";
+            font-size: 22px;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1 style="text-align:center;">{{ title }}</h1>
+
+<h3 style="text-align:center;">{{ subtitle }}</h3>
+
+<div class="cards">
+
+    {% for name, card in cards.items() %}
+
+        <div class="card">
+
+            <div class="card-header">
+                <div class="index">{{ loop.index }}</div>
+                <div class="name">{{ name }}</div>
+
+                {% if 'tags' in card %}
+                    <div class="tags">
+                        {% for tag, color in card.tags.items() %}
+                            <span class="tag" style="border-color: {{ color }};">
+            <span class="tag-text">{{ tag }}</span>
+          </span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div class="horizontal-line"></div>
+
+            {% for key, content in card.content.items() %}
+
+                <div class="card-body">
+
+                    {% if 'title' in content %}
+                        <div class="title">{{ content.title }}</div>
+                    {% endif %}
+
+                    <div>{{ content.main }}</div>
+
+                </div>
+                {% if not loop.last %}
+                    <div style="border-top: 2px solid #ccc; margin: 8px 0;"></div>
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+
+</html>
