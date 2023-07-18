@@ -31,13 +31,14 @@ from nonebot_plugin_templates.template_types import *
 from nonebot_plugin_templates.templates_render import menu_render, colorlist_render
 
 menu = Menu("私有bot", des="使用和管理自己独有的bot的命令,私有bot只有主人可使用,其他人无法使用",
-            funcs=Funcs(Func("/bot名称+询问的问题",
-                             "与指定属于自己的bot对话\n(可使用'回复'某bot最后一个答案来连续和它对话)\n(可回复'清除历史','刷新对话'来清除bot的对话记忆)") +
-                        Func("/所有bot",
-                             "查询所有的可用的私有的bot,以获取bot名称和相关信息") +
-                        Func("/创建bot", "创建新的私有的bot") +
-                        Func("/改名bot", "更改自己的bot的名称") +
-                        Func("/删除bot", "删除指定自己的bot")))
+            funcs=Funcs(
+                Func("/bot名称+询问的问题",
+                     "与指定属于自己的bot对话\n(可使用'回复'某bot最后一个答案来连续和它对话)\n(可回复'清除历史','刷新对话'来清除bot的对话记忆)") +
+                Func("/所有bot",
+                     "查询所有的可用的私有的bot,以获取bot名称和相关信息") +
+                Func("/创建bot", "创建新的私有的bot") +
+                Func("/改名bot", "更改自己的bot的名称") +
+                Func("/删除bot", "删除指定自己的bot")))
 menu += Menu("公有bot", des="使用和管理公有的bot的命令",
              funcs=Funcs(
                  Func("bot名称+询问的问题",
