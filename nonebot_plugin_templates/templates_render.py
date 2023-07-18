@@ -3,7 +3,7 @@ from typing import Optional
 
 from nonebot import require
 
-from template_types import *
+from nonebot_plugin_templates.template_types import *
 
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_htmlrender import html_to_pic
