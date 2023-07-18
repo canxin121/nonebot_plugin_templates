@@ -49,4 +49,6 @@ menu += Menu("公有bot", des="使用和管理公有的bot的命令",
 pic_bytes = await menu_render(menu, 800)
 ```
 
+![menu.png](src/menu.png)
+
 > 构建一个卡片列表的示例
