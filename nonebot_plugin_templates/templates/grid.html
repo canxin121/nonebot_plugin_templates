@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @font-face {
+            font-family: "Custom Font";
+            src: url("{{font_path}}");
+        }
+        h1 {
+            text-align: center;
+        }
+        html{
+            background-color: {{ colors['html_bg'] }};
+        }
+        html, body {
+            font-family: "Custom Font";
+        }
+        .item {
+            border-radius:6px;
+            width: 100%;
+            border: 1px solid black;
+            margin-bottom: 3px;
+        }
+        .item .key-value {
+            display: flex;
+            flex-direction: row;
+            border-radius:6px 6px 0 0;
+            background-color: {{ colors['key'] }};
+            border-bottom: 1px solid black;
+        }
+        .item .key-value .index {
+            font-family: "Custom Font";
+            background-color: {{ colors['key'] }};
+            display: inline-flex;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: auto;
+            margin-bottom: auto;
+            margin-left: 3px;
+            color: {{ colors['func_index_text'] }};
+            background-color: {{ colors['func_index_bg'] }};
+            border-radius: 50%;
+        }
+        .item .key-value .key {
+            padding: 3px 0 3px 1px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+            margin-left: 0px;
+            width: calc(100% - 50px);
+            border-radius: 0 6px 0 0;
+        }
+        .item .value {
+            padding: 4px;
+            font-size: 16px;
+            border-radius: 0 0 6px 6px;
+            background-color: {{ colors['value'] }};
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    {% for key, value in data.items() %}
+    <div class="item">
+        <div class="key-value">
+            <div class="index">{{ loop.index }}</div>
+            <div class="key">{{ key }}</div>
+        </div>
+        <div class="value">{{ value }}</div>
+    </div>
+    {% endfor %}
+
+</body>
+</html>

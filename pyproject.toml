@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-templates"
-version = "0.1.3"
+version = "0.1.5"
 description = "为nonebot提供一系列jinja2 template模板,方便的生成图片"
 authors = ["canxin <1969730106@qq.com>"]
 readme = "README.md"

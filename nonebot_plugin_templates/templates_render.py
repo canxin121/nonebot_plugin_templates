@@ -1,3 +1,4 @@
+import asyncio
 from pathlib import Path
 from typing import Optional
 
@@ -21,37 +22,38 @@ env = Environment(
 COLORLIST_TEMPLATE = env.get_template("colorlist.html")
 MENUS_TEMPLATE = env.get_template("menus.html")
 CARD_TEMPLATE = env.get_template("cards.html")
+GRID_TEMPLATE = env.get_template("grid.html")
 
 Font_Path = (TEMPLATES_PATH / "PingFang.ttf").as_uri()
 
 
 async def colorlist_render(
-        _list: dict,
-        width: int,
-        headline: str = "列表",
-        description: str = "🌈列表",
-        font_size: int = 15,
-        font_path: str = Font_Path
+    _list: dict,
+    width: int,
+    headline: str = "列表",
+    description: str = "🌈列表",
+    font_size: int = 15,
+    font_path: str = Font_Path,
 ) -> bytes:
-    """ 函数名：colorlist_render
+    """函数名：colorlist_render
 
-        功能：该函数用于生成一张带有颜色列表的图片。
+    功能：该函数用于生成一张带有颜色列表的图片。
 
-        参数：
-            _list: 字典类型的列表，其中键为字符串，值为颜色代码。
-                {
-                "line1 name":"description of line1",
-                "line2 name":"description of line1"
-                }
-            width: 图片的宽度。
-            headline: 列表的标题，默认值为"列表"。
-            description: 列表的描述，默认值为"🌈列表"。
-            font_size: 字体大小，默认值为15。
-            font_path: 字体文件的路径，默认值为Font_Path。
+    参数：
+        _list: 字典类型的列表，其中键为字符串，值为颜色代码。
+            {
+            "line1 name":"description of line1",
+            "line2 name":"description of line1"
+            }
+        width: 图片的宽度。
+        headline: 列表的标题，默认值为"列表"。
+        description: 列表的描述，默认值为"🌈列表"。
+        font_size: 字体大小，默认值为15。
+        font_path: 字体文件的路径，默认值为Font_Path。
 
-        返回值:
-            该函数返回彩色列表的图片bytes。
-        """
+    返回值:
+        该函数返回彩色列表的图片bytes。
+    """
     html = await COLORLIST_TEMPLATE.render_async(
         headline=headline,
         list=_list,
@@ -62,7 +64,9 @@ async def colorlist_render(
     return await html_to_pic(html, viewport={"width": width, "height": 10})
 
 
-async def menu_render(menus: Menus, width: int, colors: Optional[dict] = None, font_path: str = Font_Path) -> bytes:
+async def menu_render(
+    menus: Menus, width: int, colors: Optional[dict] = None, font_path: str = Font_Path
+) -> bytes:
     """
     函数：menu_render
 
@@ -100,8 +104,14 @@ async def menu_render(menus: Menus, width: int, colors: Optional[dict] = None, f
     return await html_to_pic(html, viewport={"width": width, "height": 10})
 
 
-async def cardlist_render(title: str, cards: Cards, subtitle: str = "", width: int = 500, colors: Optional[dict] = None,
-                          font_path: str = Font_Path) -> bytes:
+async def cardlist_render(
+    title: str,
+    cards: Cards,
+    subtitle: str = "",
+    width: int = 500,
+    colors: Optional[dict] = None,
+    font_path: str = Font_Path,
+) -> bytes:
     """
     函数：cardlist_render
 
@@ -130,13 +140,53 @@ async def cardlist_render(title: str, cards: Cards, subtitle: str = "", width: i
     bytes：包含卡片列表渲染图像的 bytes 对象,可直接发送。
     """
     if colors is None:
-        colors = {"html": "#f3f3f3",  # 整体页面最底层的背景颜色
-                  "body_border": "#ffffff",  # 最外面的边框的的背景颜色
-                  "card_header": "#E5F3F9",  # 卡片的标题栏的背景颜色
-                  "card-body": "#ffffff",  # 卡片主体的颜色
-                  "index_text": "#FFFFFF",  # 数字索引的文本颜色
-                  "index_bg": "#8D3C1E",  # 数字索引的圆形背景颜色
-                  }
-    html = await CARD_TEMPLATE.render_async(title=title, cards=cards.to_dict(), subtitle=subtitle, colors=colors,
-                                            font_path=font_path)
+        colors = {
+            "html": "#f3f3f3",  # 整体页面最底层的背景颜色
+            "body_border": "#ffffff",  # 最外面的边框的的背景颜色
+            "card_header": "#E5F3F9",  # 卡片的标题栏的背景颜色
+            "card-body": "#ffffff",  # 卡片主体的颜色
+            "index_text": "#FFFFFF",  # 数字索引的文本颜色
+            "index_bg": "#8D3C1E",  # 数字索引的圆形背景颜色
+        }
+    html = await CARD_TEMPLATE.render_async(
+        title=title,
+        cards=cards.to_dict(),
+        subtitle=subtitle,
+        colors=colors,
+        font_path=font_path,
+    )
+    return await html_to_pic(html, viewport={"width": width, "height": 10})
+
+
+async def dict_render(
+    data: dict,
+    width: int = 400,
+    title: str = "表格",
+    font_path: str = Font_Path,
+    colors: dict = {},
+) -> bytes:
+    """函数名：colorlist_render
+
+    功能：该函数用于生成一张带有颜色列表的图片。
+
+    参数：
+        data:要转图片的dict
+        width:如片宽度
+        title:图片标题
+        key_tile:dict的键
+
+    返回值:
+        该函数返回彩色列表的图片bytes。
+    """
+    if not colors:
+        colors = {
+            "html_bg": "#d9d9d9",  # 整体背景颜色
+            "key": "#E5F3F9",  # 键所在的块的颜色
+            "value": "#ffffff",  # 值所在的块的背景颜色
+            "func_index_text": "#FFFFFF",  # 命令前的索引的数字的颜色
+            "func_index_bg": "#8D3C1E",  # 命令前的索引的数字的圆形背景颜色
+        }
+    html = await GRID_TEMPLATE.render_async(
+        title=title, font_path=font_path, data=data, colors=colors
+    )
     return await html_to_pic(html, viewport={"width": width, "height": 10})
